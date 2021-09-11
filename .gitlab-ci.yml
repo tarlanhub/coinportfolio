@@ -1,0 +1,21 @@
+image: weboaks/alpine-docker-compose:latest
+
+stages:
+  - lint_and_test
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:19.03.1-dind
+
+lint:
+  image: circleci/node:14.15
+  stage: lint_and_test
+  script:
+    - yarn
+    - yarn lint:code
+    - yarn lint:types
+    - yarn lint:styles

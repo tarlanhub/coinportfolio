@@ -1,0 +1,4 @@
+yarn lint-staged
+yarn lint:code
+yarn lint:styles
+yarn lint:types
