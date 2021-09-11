@@ -87,12 +87,13 @@ export default function CoinSelection({ results }) {
 
 //ServerSideRendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await getCoinsList();
+  const response = await fetch('http://localhost:3000/api/coins');
+  const data = await response.json();
 
   console.log(response);
 
   return {
-    props: { results: { response } },
+    props: { results: { data } },
   };
 };
 
