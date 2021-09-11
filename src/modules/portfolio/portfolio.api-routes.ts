@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import React, { useState } from 'react';
 
 import { getCoinsList, getQuotes } from '../../services/coinMarketCap.service';
 import { logger } from '../../services/logger.service';

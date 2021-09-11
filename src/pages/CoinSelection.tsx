@@ -71,7 +71,6 @@ export default function CoinSelection({ results }) {
     <div>
       <GlobalStyle />
       <PortfolioListingPage />
-      <div>{results.response.data[0].Name}</div>
       <List>
         {res.map((res, i) => (
           <Link href="/" key={res.Name}>
@@ -87,10 +86,10 @@ export default function CoinSelection({ results }) {
 
 //ServerSideRendering
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const response = await fetch('http://localhost:3000/api/coins');
-  const data = await response.json();
+  const coins = await fetch('http://localhost:3000/api/coins');
+  const data = JSON.stringify(coins);
 
-  console.log(response);
+  console.log(coins);
 
   return {
     props: { results: { data } },
