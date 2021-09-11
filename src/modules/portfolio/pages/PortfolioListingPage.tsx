@@ -7,8 +7,6 @@ export default function PortfolioListingPage() {
   const [holdings, setHoldings] = useState(5);
 
   const handleLocalStorage = () => {
-    const update = localStorage.getItem('Holdings');
-
     setHoldings(8);
   };
 
