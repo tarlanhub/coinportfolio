@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
+import { GoSearch, BsFillBagFill } from 'react-icons/go';
 import styled from 'styled-components';
 
 export default function PortfolioListingPage() {
@@ -25,7 +26,9 @@ export default function PortfolioListingPage() {
       </Link>
       <Link href="/CoinSelection">
         <Menu>
-          <MenuLink>Search</MenuLink>
+          <MenuLink>
+            <GoSearch />
+          </MenuLink>
         </Menu>
       </Link>
     </Nav>
@@ -37,7 +40,7 @@ const MenuLink = styled.a`
   cursor: pointer;
   text-align: center;
   text-decoration: none;
-  color: #67bc98;
+  color: black;
   transition: all 0.3s ease-in;
   font-size: 0.9rem;
   &:hover {
@@ -78,7 +81,6 @@ const Menu = styled.div`
   align-items: center;
   position: relative;
   @media (max-width: 768px) {
-    overflow: hidden;
     flex-direction: column;
     transition: max-height 0.3s ease-in;
     width: 100%;

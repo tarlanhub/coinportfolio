@@ -4,32 +4,19 @@ import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import PortfolioListingPage from '../modules/portfolio/pages/PortfolioListingPage';
-import { listCoinsHandler } from '../modules/portfolio/portfolio.api-routes';
-import { getCoinsList, getQuotes } from '../services/coinMarketCap.service';
-export default function CoinSelection({ results }) {
+
+export default function CoinSelection({ data }) {
   const [res, setRes] = useState([]);
-  const [selectedCoin, setSelectedCoin] = useState({
-    Name: [],
-    Id: [],
-  });
-  const [loading, setLoading] = useState(true);
-  const list = [];
 
-  console.log(results);
   const clickHandler = async () => {
-    const response = await fetch('http://localhost:3000/api/coins');
-    const data = await response.json();
-
-    console.log(data.data);
     const list = [];
 
     for (let i = 0; i < data.data.length; i++) {
       list.push({ Name: data.data[i].name, Id: data.data[i].id });
     }
 
-    console.log('s', list[0].Name);
-
     setRes(list);
+    console.log(data);
   };
 
   const selected = [];
@@ -39,16 +26,12 @@ export default function CoinSelection({ results }) {
       const oldItems = [];
       const dataOld = JSON.parse(localStorage.getItem('Name'));
 
-      console.log('selexted', selected);
       for (const element of dataOld) {
         oldItems.push({ Name: element.Name, Id: element.Id });
       }
       for (const element of selected) {
         oldItems.push({ Name: element.Name, Id: element.Id });
       }
-
-      console.log('old items', oldItems);
-      console.log('se', selected);
 
       localStorage.setItem('Name', JSON.stringify(oldItems));
     } else {
@@ -59,13 +42,10 @@ export default function CoinSelection({ results }) {
 
     // handleStorage();
   };
-  const handleStorage = () => {
-    const oldItems = JSON.parse(localStorage.Name);
 
-    console.log('old items', oldItems);
-  };
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    clickHandler();
+  }, []);
 
   return (
     <div>
@@ -85,14 +65,12 @@ export default function CoinSelection({ results }) {
 }
 
 //ServerSideRendering
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const coins = await fetch('http://localhost:3000/api/coins');
-  const data = JSON.stringify(coins);
-
-  console.log(coins);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const response = await fetch('http://localhost:3000/api/coins/');
+  const data = await response.json();
 
   return {
-    props: { results: { data } },
+    props: { data },
   };
 };
 

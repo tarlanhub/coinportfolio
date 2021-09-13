@@ -102,7 +102,7 @@ type CryptoCurrencyQuote = {
  * Get the latest crypto currency price by provided currency IDs.
  * Documentation: https://coinmarketcap.com/api/documentation/v1/#operation/getV1CryptocurrencyQuotesLatest
  */
-const getQuotes = async (currencyIds: string) => {
+const getQuotes = async (currencyIds: number) => {
   const { data } = await client.get<{
     data: Record<string, CryptoCurrencyQuote>;
     status: CmcStatus;
