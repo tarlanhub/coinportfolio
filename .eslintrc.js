@@ -30,9 +30,8 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:import/warnings',
     'plugin:unicorn/recommended',
-    'plugin:react-hooks/recommended',
   ],
-  plugins: ['react', '@typescript-eslint', 'prettier', 'react-hooks'],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
     // common rules
     'no-unused-vars': 'off',
@@ -64,7 +63,6 @@ module.exports = {
       },
     ],
     'no-lonely-if': 'error',
-    'no-mixed-operators': 'error',
     'no-multi-assign': 'error',
     'no-nested-ternary': 'error',
     'no-plusplus': 'error',
@@ -108,14 +106,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-require-imports': 'error',
     '@typescript-eslint/prefer-includes': 'error',
-    '@typescript-eslint/no-magic-numbers': [
-      'warn',
-      {
-        ignoreEnums: true,
-        ignoreArrayIndexes: true,
-        ignore: [200, 300, 500, 401, 404, 503],
-      },
-    ],
+    
     '@typescript-eslint/explicit-module-boundary-types': 'off',
   },
 };
