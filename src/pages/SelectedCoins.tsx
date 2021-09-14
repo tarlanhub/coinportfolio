@@ -290,7 +290,7 @@ export default function SelectedCoins() {
   }, [quotes, netCost]);
   useEffect(() => {
     if (quotes !== undefined) {
-      quotes.map((x, i) => {
+      quotes.map((_x, i) => {
         const q1 = marketValue[i];
         const p1 = netCost[i];
 
