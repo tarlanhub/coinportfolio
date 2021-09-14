@@ -45,7 +45,7 @@ export const getCoinQuoteHandler = async (
   }
 
   try {
-    const coinQuotes = await getQuotes(ids as number);
+    const coinQuotes = await getQuotes(ids as unknown as number);
 
     return res.status(200).json(coinQuotes);
   } catch (error) {

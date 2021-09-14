@@ -378,7 +378,6 @@ export default function SelectedCoins() {
                     {holdings[i] === null || holdings[i] === undefined
                       ? 0
                       : profit[i]}{' '}
-                    %
                   </Child>
                   <Current2></Current2>
                   <Value> </Value>
