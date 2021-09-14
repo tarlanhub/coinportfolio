@@ -64,7 +64,7 @@ function CoinSelection({ data }) {
 }
 
 //ServerSideRendering
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const response = await fetch('http://localhost:3000/api/coins/');
   const data = await response.json();
 
