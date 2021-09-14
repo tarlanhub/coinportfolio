@@ -65,7 +65,9 @@ function CoinSelection({ data }) {
 
 //ServerSideRendering
 export const getServerSideProps: GetServerSideProps = async () => {
-  const response = await fetch('http://localhost:3000/api/coins/');
+  const response = await fetch(
+    'https://coinportfolio-2b9gq7vgw-tarlan294-gmailcom.vercel.app/api/coins/'
+  );
   const data = await response.json();
 
   return {
