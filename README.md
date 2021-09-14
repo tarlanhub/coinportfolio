@@ -10,8 +10,14 @@ Install dependencies:
 $ yarn
 ```
 
-You will need CoinMarketCap API key to access their APIs.
-After generating an API key at https://pro.coinmarketcap.com/, update `CMC_API_KEY` environment variable value in the `.env` file.
+The Application is able to add selected coins to the dashboard. 
+Then click the coin  previously added.
+When you add transaction, current rate of selected coin  will be displayed on the modal its non - changeable
+Enter Quantity.
+After Adding transaction all the fields in dashboard will be updated.
+
+
+
 
 Run project in development mode:
 
