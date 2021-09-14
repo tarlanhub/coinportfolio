@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { GoSearch, BsFillBagFill } from 'react-icons/go';
+import { GoSearch } from 'react-icons/go';
 import styled from 'styled-components';
 
 export default function PortfolioListingPage() {

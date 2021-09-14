@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/prefer-number-properties */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-css-collapse';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
