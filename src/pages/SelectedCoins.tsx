@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/prefer-number-properties */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Collapse from 'react-css-collapse';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
@@ -290,7 +290,7 @@ export default function SelectedCoins() {
   }, [quotes, netCost]);
   useEffect(() => {
     if (quotes !== undefined) {
-      quotes.map((x, i) => {
+      quotes.map((_x, i) => {
         const q1 = marketValue[i];
         const p1 = netCost[i];
 
@@ -298,7 +298,7 @@ export default function SelectedCoins() {
         setProfit(profitValue);
       });
     }
-  }, [marketValue, netCost]);
+  }, [marketValue]);
 
   return (
     <div>

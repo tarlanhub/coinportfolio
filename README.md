@@ -14,7 +14,7 @@ The Application is able to add selected coins to the dashboard.
 Then click the coin  previously added.
 When you add transaction, current rate of selected coin  will be displayed on the modal its non - changeable
 Enter Quantity.
-After Adding transaction all the fields in dashboard will be updated.
+After Adding transaction all the fields in dashboard will be updated
 
 
 
