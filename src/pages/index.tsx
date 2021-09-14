@@ -18,6 +18,5 @@ export default function Home() {
 const GlobalStyle = createGlobalStyle`
 body {
     background: #efefef;
-    
 }
 `;

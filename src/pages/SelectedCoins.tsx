@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable unicorn/prefer-number-properties */
+import React, { useState, useEffect, useCallback } from 'react';
 import Collapse from 'react-css-collapse';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { BiDollar } from 'react-icons/bi';
@@ -10,7 +11,7 @@ import Modal, { ModalProvider, BaseModalBackground } from 'styled-react-modal';
 
 const Child = styled.div`
   float: right;
-  width: 20%;
+  width: 35%;
   font-weight: 500;
   padding-left: 2 rem;
 `;
@@ -32,7 +33,7 @@ const Value = styled.div`
 `;
 const Row = styled.div`
   display: flex;
-  margin-left: 20rem;
+  margin-left: 10rem;
 `;
 const NoCoin = styled.div`
   font-weight: 800;
@@ -152,7 +153,6 @@ const AddTrans = styled.button`
 //Selected Coins Page && Home Page
 
 export default function SelectedCoins() {
-  const [res, setRes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -164,12 +164,14 @@ export default function SelectedCoins() {
   }
 
   function afterOpen() {
-    document.body.style.overflow = 'scroll';
-
+    if (opacity === 0) {
+      document.body.style.overflow = 'scroll';
+    }
     setTimeout(() => {
-      setOpacity(0);
+      setOpacity(1);
     }, 100);
   }
+
   function beforeClose() {
     return new Promise((resolve) => {
       setOpacity(0);
@@ -184,53 +186,76 @@ export default function SelectedCoins() {
       setLoading2(true);
       const a = JSON.parse(localStorage.getItem('Name'));
 
-      console.log('ıds', res);
-      setRes(a);
-
       for (const element of a) {
         coinsIds.push(element.Id);
       }
-      console.log(res);
     } else {
       setLoading(true);
       setLoading2(false);
     }
   };
+
   const [openItemIndex, setOpenItemIndex] = useState();
   const [quotes, setQuotes] = useState([]);
   const [holdings, setHoldings] = useState([]);
   const [netCost, setNetCost] = useState([]);
   const [marketValue, setMarketValue] = useState([]);
   const [profit, setProfit] = useState([]);
-
+  const defaultValue = [...marketValue];
+  const profitValue = [...profit];
   const anew = [];
-  const defaultValue = [];
 
   const clickHandler = async () => {
     const response = await fetch(`api/quotes?ids=${coinsIds}`);
     const data = await response.json();
     const qts = data.data;
 
-    console.log(qts);
     for (const element of coinsIds) {
       anew.push(qts[element]);
     }
-    for (let i = 0; i < anew.length; i++) {
-      defaultValue.push(0);
-    }
     setQuotes(anew);
-    setHoldings(defaultValue);
-    setNetCost(defaultValue);
-    setMarketValue(defaultValue);
-    setProfit(defaultValue);
   };
 
-  holdings[0] = 5;
   function toggle(id) {
     setOpenItemIndex(openItemIndex === id ? undefined : id);
   }
+  const items = [...holdings];
+  const mValue = [];
+  const cost = [...netCost];
+  let item = null;
+  const rates = [];
 
-  function transaction(i) {
+  function transaction(event) {
+    item = event.target.valueAsNumber;
+  }
+
+  function submit(i) {
+    if (items[i] !== undefined) {
+      items[i] += item;
+    } else {
+      items[i] = item;
+    }
+    const q1 = item;
+    const p1 = quotes[i].quote.USD.price;
+    const q1p1 = q1 * p1;
+
+    if (cost[i] !== undefined) {
+      cost[i] += q1p1;
+    } else {
+      cost[i] = q1p1;
+    }
+
+    localStorage.setItem('Holdings', JSON.stringify(items));
+    localStorage.setItem('NetCost', JSON.stringify(cost));
+    const a = JSON.parse(localStorage.getItem('Holdings'));
+    const b = JSON.parse(localStorage.getItem('NetCost'));
+
+    toggle(i);
+
+    setHoldings(a);
+    setNetCost(b);
+
+    setMarketValue(defaultValue);
     setOpacity(0);
     setIsOpen(!isOpen);
   }
@@ -238,18 +263,49 @@ export default function SelectedCoins() {
   useEffect(() => {
     handleLocalStorage();
     clickHandler();
-    setHoldings(defaultValue);
-    setNetCost(defaultValue);
-    setMarketValue(defaultValue);
-    setProfit(defaultValue);
+
+    if (JSON.parse(localStorage.getItem('Holdings')) !== null) {
+      const a = JSON.parse(localStorage.getItem('Holdings'));
+      const b = JSON.parse(localStorage.getItem('NetCost'));
+
+      setHoldings(a);
+      setNetCost(b);
+    }
   }, []);
+
+  useEffect(() => {
+    if (quotes !== undefined) {
+      quotes.map((x, i) => {
+        mValue.push(i);
+        rates.push(x.quote.USD.price);
+        const q1 = holdings[i];
+        const p1 = rates[i];
+
+        defaultValue[i] = q1 * p1;
+
+        setMarketValue(defaultValue);
+        localStorage.setItem('MarketValue', JSON.stringify(defaultValue));
+      });
+    }
+  }, [quotes, netCost]);
+  useEffect(() => {
+    if (quotes !== undefined) {
+      quotes.map((x, i) => {
+        const q1 = marketValue[i];
+        const p1 = netCost[i];
+
+        profitValue[i] = q1 - p1;
+        setProfit(profitValue);
+      });
+    }
+  }, [marketValue]);
 
   return (
     <div>
       {!loading && (
         <List2>
           {quotes.map((x, i) => (
-            <li key={x}>
+            <li key={x.id}>
               <Button type="button" onClick={() => toggle(x)}>
                 <Row>
                   <Child>
@@ -296,17 +352,34 @@ export default function SelectedCoins() {
                       {x.quote.USD.percent_change_24h > 0 ? ' ↑' : ' ↓'} %
                     </Span>
                   </Current>
-                  <Value>
-                    {' '}
-                    {x.quote.USD.price}
-                    {x.quote.USD.percent_change_24h > 0 ? ' ↑' : ' ↓'}{' '}
-                  </Value>
+                  <Value> {x.quote.USD.price}</Value>
                 </Row>
                 <Row>
-                  <Child>{holdings[i]}</Child>
-                  <Child>{netCost[i]}</Child>
-                  <Child>{marketValue[i]}</Child>
-                  <Child>{profit[i]}</Child>
+                  <Child>
+                    {holdings[i] === null || holdings[i] === undefined
+                      ? 0
+                      : holdings[i]}
+                  </Child>
+                  <Child>
+                    {netCost[i] === null || netCost[i] === undefined
+                      ? 0
+                      : netCost[i]}
+                  </Child>
+                  <Child>
+                    {holdings[i] === null || holdings[i] === undefined
+                      ? 0
+                      : marketValue[i]}
+                  </Child>
+                  <Child
+                    style={{
+                      color: profit[i] > 0 ? 'green' : 'red',
+                    }}
+                  >
+                    {holdings[i] === null || holdings[i] === undefined
+                      ? 0
+                      : profit[i]}{' '}
+                    %
+                  </Child>
                   <Current2></Current2>
                   <Value> </Value>
                 </Row>
@@ -322,6 +395,7 @@ export default function SelectedCoins() {
                       beforeClose={beforeClose}
                       onBackgroundClick={toggleModal}
                       onEscapeKeydown={toggleModal}
+                      allowScroll={false}
                     >
                       {' '}
                       <div
@@ -347,6 +421,7 @@ export default function SelectedCoins() {
                             paddingLeft: '10px',
                           }}
                           value={x.quote.USD.price}
+                          disabled
                         />
                         <span
                           style={{
@@ -363,8 +438,9 @@ export default function SelectedCoins() {
                             paddingLeft: '10px',
                           }}
                           type="number"
+                          onChange={(event) => transaction(event)}
                         />
-                        <Trans type="button" onClick={() => transaction(i)}>
+                        <Trans type="button" onClick={() => submit(i)}>
                           Save Transaction
                         </Trans>
                       </div>

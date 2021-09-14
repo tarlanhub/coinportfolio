@@ -5,19 +5,22 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import PortfolioListingPage from '../modules/portfolio/pages/PortfolioListingPage';
 
-export default function CoinSelection({ data }) {
+function CoinSelection({ data }) {
   const [res, setRes] = useState([]);
 
-  const clickHandler = async () => {
+  useEffect(() => {
     const list = [];
 
     for (let i = 0; i < data.data.length; i++) {
-      list.push({ Name: data.data[i].name, Id: data.data[i].id });
+      list.push({
+        Name: data.data[i].name,
+        Id: data.data[i].id,
+        Price: data.data[i].quote.USD.price,
+      });
     }
 
     setRes(list);
-    console.log(data);
-  };
+  }, [data]);
 
   const selected = [];
   const handleClick = (i) => {
@@ -43,10 +46,6 @@ export default function CoinSelection({ data }) {
     // handleStorage();
   };
 
-  useEffect(() => {
-    clickHandler();
-  }, []);
-
   return (
     <div>
       <GlobalStyle />
@@ -70,10 +69,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const data = await response.json();
 
   return {
-    props: { data },
+    props: {
+      data,
+    },
   };
 };
-
+export default CoinSelection;
 //Styles
 const GlobalStyle = createGlobalStyle`
 body {

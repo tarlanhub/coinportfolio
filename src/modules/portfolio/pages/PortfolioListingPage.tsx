@@ -5,14 +5,20 @@ import styled from 'styled-components';
 
 export default function PortfolioListingPage() {
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  const [holdings, setHoldings] = useState(5);
+  const [holdings, setHoldings] = useState([]);
 
-  const handleLocalStorage = () => {
-    setHoldings(8);
+  const marketValue = () => {
+    if (JSON.parse(localStorage.getItem('MarketValue')) !== null) {
+      const a = JSON.parse(localStorage.getItem('MarketValue'));
+
+      const b = a.reduce((b, v) => (b = b + v), 0);
+
+      setHoldings(b);
+    }
   };
 
   useEffect(() => {
-    handleLocalStorage();
+    marketValue();
   }, [holdings]);
 
   return (
