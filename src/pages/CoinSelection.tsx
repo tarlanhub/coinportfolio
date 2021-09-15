@@ -7,10 +7,10 @@ import PortfolioListingPage from '../modules/portfolio/pages/PortfolioListingPag
 
 function CoinSelection({ data }) {
   const [res, setRes] = useState([]);
+  const [isSelectedPrev, setIssSelectedPrev] = useState([]);
+  const list = [];
 
   useEffect(() => {
-    const list = [];
-
     for (let i = 0; i < data.data.length; i++) {
       list.push({
         Name: data.data[i].name,
@@ -20,6 +20,9 @@ function CoinSelection({ data }) {
     }
 
     setRes(list);
+    if (JSON.parse(localStorage.getItem('Name')) !== null) {
+      setIssSelectedPrev(JSON.parse(localStorage.getItem('Name')));
+    }
   }, [data]);
 
   const selected = [];
@@ -37,6 +40,7 @@ function CoinSelection({ data }) {
       }
 
       localStorage.setItem('Name', JSON.stringify(oldItems));
+      setIssSelectedPrev(JSON.parse(localStorage.getItem('Name')));
     } else {
       selected.push({ Name: res[i].Name, Id: res[i].Id });
 
@@ -46,6 +50,8 @@ function CoinSelection({ data }) {
     // handleStorage();
   };
 
+  console.log(isSelectedPrev.find((x) => x.Name === 'Holo'));
+
   return (
     <div>
       <GlobalStyle />
@@ -54,7 +60,12 @@ function CoinSelection({ data }) {
         {res.map((res, i) => (
           <Link href="/" key={res.Name}>
             <Button onClick={() => handleClick(i)} key={res.Name}>
-              <ul>{res.Name}</ul>
+              <div>
+                {isSelectedPrev.find((x) => x.Name === res.Name) ===
+                undefined ? (
+                  <ul>{res.Name}</ul>
+                ) : null}
+              </div>
             </Button>
           </Link>
         ))}
@@ -99,6 +110,7 @@ const Button = styled.ul`
   text-align: left;
   padding-right: 2rem;
   text-decoration: none;
+  display: hidden;
   color: black;
   transition: all 0.3s ease-in;
   font-size: 18px;
