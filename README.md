@@ -9,7 +9,10 @@ Install dependencies:
 ```sh
 $ yarn
 ```
+Built With
+Next JS
 
+`````````
 The Application is able to add selected coins to the dashboard. 
 Then click the coin  previously added.
 When you add transaction, current rate of selected coin  will be displayed on the modal its non - changeable
